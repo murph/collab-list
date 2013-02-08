@@ -1,6 +1,5 @@
-/*global console, jQuery, $ */
-
 var us;
+var theArray = [];
 
 function joined() {
     $("#unjoined").hide();
@@ -30,17 +29,57 @@ function createChild() {
     });
 }
 
+function rebuildList(data)
+{
+    var items = [];
+    $('#syncList').empty();
+    $.each(data, function(i, item) {
+        items.push('<h2 class="edit" id="' + i + '">' + item + '</h2>');
+    });
+    $('#syncList').append( items.join('') );
+
+    $('.edit').editable(function(value, settings) { 
+        console.log(this.id);
+        doModify(this.id, value);
+        return(value);
+    }, { 
+        type    : 'textarea',
+        submit  : 'OK'
+    });
+
+}
+
+
 function onUpdate(foo, bar, update) {
     console.log(update);
 
-    $("#syncList").append("<li>" + update + "</li>");
+    if (update.type === "append") {
+        theArray.push(update.value);
+    }
+
+    if (update.type === "modify") {
+        theArray[update.idx] = update.value;
+    }
+
+    rebuildList(theArray);
 }
 
-function sendUpdate() {
-    var update = $("#newEntry").val();
+function doAppend() {
+    var val = $("#newEntry").val();
     $("#newEntry").val("");
-    
-    us.sendUpdate(update);
+
+    us.sendUpdate({
+        type: "append",
+        value: val
+    });
+}
+
+function doModify(idx, value) {
+    us.sendUpdate({
+        type: "modify",
+        idx: idx,
+        value: value
+    });
 }
 
 $(document).ready(function() {
@@ -68,7 +107,7 @@ $(document).ready(function() {
 
     $("#createChildToken").click(createChild);
     $("#sub").click(subscribe);
-    $("#newEntryBtn").click(sendUpdate);
+    $("#newEntryBtn").click(doAppend);
     
     $("#status").html("Doing Nothing");
 });
