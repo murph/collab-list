@@ -10,7 +10,7 @@ function joined() {
 function subscribe() {
     $("#sub").click(unsubscribe);
     $("#sub").html("Unsubscribe");
-    us.subscribe(null, onUpdate);
+    us.subscribe(onUpdate);
 }
 
 function unsubscribe() {
