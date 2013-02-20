@@ -8,12 +8,14 @@ function joined() {
 }
 
 function subscribe() {
+    $("#sub").off("click");
     $("#sub").click(unsubscribe);
     $("#sub").html("Unsubscribe");
     us.subscribe(onUpdate);
 }
 
 function unsubscribe() {
+    $("#sub").off("click");
     $("#sub").click(subscribe);
     $("#sub").html("Subscribe");
     us.unsubscribe();
