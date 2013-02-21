@@ -1,6 +1,21 @@
 var us;
 var theArray = [];
 
+function showLists(data) {
+//    $(".page").hide();
+    $("#listList").show();
+
+    var lists = JSON.parse(data);
+
+    for (var i = 0; i < lists.length; i++) {
+        $("#listList ul").append("<li>" + lists[i].name);
+    }
+}
+
+function getLists() {
+    $.get("/listLists", showLists);
+}
+
 function joined() {
     $("#unjoined").hide();
     $("#joined").show();
@@ -86,13 +101,22 @@ function doModify(idx, value) {
 
 $(document).ready(function() {
 
-    /* New Update Stream button */
-    $("#newUS").click(function() {
+    getLists();
+    $("#unjoined").show();
+
+    /* New List Button */
+    $("#newList").click(function() {
         dopamine.updateStream.createNew()
             .done(function(newUs) {
                 us = newUs;
-                $("#status").html("US created");
-                joined();
+
+                $.post("/createList", {
+                    name: "Some Name For a List",
+                    token: us.getMyToken()
+                }).done(function() {
+                    us.subscribe(onUpdate);
+                    joined();
+                });
             });
     });
 
