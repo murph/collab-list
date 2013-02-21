@@ -2,14 +2,59 @@ var us;
 var theArray = [];
 
 function showLists(data) {
-//    $(".page").hide();
     $("#listList").show();
 
     var lists = JSON.parse(data);
 
     for (var i = 0; i < lists.length; i++) {
-        $("#listList ul").append("<li>" + lists[i].name);
+        var elem = $("<li>" + lists[i].name + "</li>");
+        elem.attr("data-key", lists[i].listKey);
+        $("#listList ul").append(elem);
+        elem.click(joinList);
     }
+}
+
+function joinList() {
+    var key = $(this).attr("data-key");
+
+    var defRetrieve = $.Deferred();
+    var defRetrieve2 = $.Deferred();
+    var defNewToken = $.Deferred();
+
+    var tempUs;
+
+    $.post("/joinList/" + key)
+        .done(function(data) {
+            var token = JSON.parse(data)['token'];
+            var name = JSON.parse(data)['name'];
+            $("#listHeader").html(name);
+            dopamine.updateStream.retrieveFromToken(token)
+                .done(function(newUs) {
+                    tempUs = newUs;
+                    defRetrieve.resolve();
+                });
+        });
+
+    defRetrieve.done(function() {
+        tempUs.createNewToken({canWrite: true})
+            .done(function(newToken) {
+                dopamine.updateStream.retrieveFromToken(newToken)
+                    .done(function(newUs) {
+                        us = newUs;
+                        defRetrieve2.resolve();
+                    });
+            });
+    });
+
+    defRetrieve2.done(function() {
+        console.log("subscribng to final token");
+        console.log(us.getMyToken());
+        us.subscribe(onUpdate);
+        $(".page").hide();
+        $("#list").show();
+    });
+    
+
 }
 
 function getLists() {
@@ -85,6 +130,8 @@ function doAppend() {
     var val = $("#newEntry").val();
     $("#newEntry").val("");
 
+    console.log("sending update");
+
     us.sendUpdate({
         type: "append",
         value: val
@@ -120,20 +167,7 @@ $(document).ready(function() {
             });
     });
 
-    $("#joinUS").click(function() {
-        var token_value = $("#tokenInput").val();
-        console.log(token_value);
-        dopamine.updateStream.retrieveFromToken(token_value)
-            .done(function(newUs) {
-                us = newUs;
-                $("#status").html("Joined US");
-                joined();
-            });
-    });
-
     $("#createChildToken").click(createChild);
     $("#sub").click(subscribe);
     $("#newEntryBtn").click(doAppend);
-    
-    $("#status").html("Doing Nothing");
 });

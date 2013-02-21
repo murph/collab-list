@@ -3,6 +3,8 @@ import webapp2
 import json
 import logging
 
+from google.appengine.ext import ndb
+
 from models import List
 
 class CreateList(webapp2.RequestHandler):
@@ -23,9 +25,16 @@ class CreateList(webapp2.RequestHandler):
 class JoinList(webapp2.RequestHandler):
     def post(self, resource):
         
-        list = ndb.Key(urlsafe=resoruce).get()
+        list = ndb.Key(urlsafe=resource).get()
 
-        self.response.write(json.dumps({"token": list.master_token}))
+        self.response.write(json.dumps({"token": list.master_token,
+                                        "name": list.name}))
+
+class NameList(webapp2.RequestHandler):
+    def post(self, resource):
+        list = ndb.Key(urlsafe=resource).get()
+        list.name = self.request.get("name", default_value="No Name")
+        list.put()
 
 class ListLists(webapp2.RequestHandler):
     def get(self):
@@ -40,5 +49,6 @@ class ListLists(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([('/joinList/([^/]+)?', JoinList),
                                ('/createList', CreateList),
-                               ('/listLists', ListLists)],
+                               ('/listLists', ListLists),
+                               ('/nameList', NameList)],
                               debug=True)

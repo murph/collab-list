@@ -1,0 +1,39 @@
+.littleHeader, #listHeader {
+    padding: 0.1em 13px;
+    margin: 0px -13px;
+    background-color: rgb(187, 187, 187);
+    color: rgb(255, 255, 255);
+    letter-spacing: 3px;
+    font: bold 13px 'Trebuchet MS',Trebuchet,Verdana,sans-serif;
+}
+
+.button {
+    background-color: rgb(34, 136, 187);
+    font-size: 12px;
+    font-family: Verdana;
+    border-radius: 2px 2px 2px 2px;
+    height: 20px;
+    padding: 3px 6px;
+    width: 150px;
+}
+
+input {
+    padding: 3px 6px;
+    width: 150px;
+}
+
+.button span {
+    text-align: center;
+    background-color: transparent;
+    color: white;
+    display: block;
+    height: 20px;
+    line-height: 20px;
+    padding: 0px;
+    width: 100%;
+    
+}
+
+.main {
+    width: 500px;
+}

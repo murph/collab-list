@@ -11,37 +11,35 @@
   <script src="http://adrenalinemobility.appspot.com/js/objstore.js"></script>
   <script src="http://adrenalinemobility.appspot.com/js/appendstore.js"></script>
   <script src="/static/list.js"></script>
+  <link rel="stylesheet" href="/static/style.css">
+
+
 </head>
 <body>
-  <div id="status"></div>
-
+  <div class="main">
   <div id="listList" class="page">
+    <span class="littleHeader">Click a list to join it</span>
     <ul>
+    </ul>
   </div>
 
   <div id="unjoined" class="page">
-    <div>
-      <button id="newList">Create a new List</button>
+    <div class="button">
+      <span id="newList">Create a new List</span>
     </div>
-    
-    <div>
-      <input type="text" id="tokenInput"></input><button id="joinUS">Input access Token</button>
-    </div>
-  </div>
-
-  <div id="joined" class="page" style="display:none;">
-    <h2>You've joined a US</h2>
-
-    <button id="createChildToken">Create a child token</button>
-    <div id="childTokenDisplay"></div>
   </div>
 
   <div id="list" class="page" style="display:none;">
-    <button id="sub">Subscribe</button>
+    <span id="listHeader"></span>
     <ul id="syncList">
       
     </ul>
-    <input type="text" id="newEntry"></input><button id="newEntryBtn">Add new entry</button>
+   
+    <input type="text" id="newEntry"></input>
+    <div class="button">
+      <span id="newEntryBtn">Add new entry</span>
+    </div>
+  </div>
   </div>
 </body>
 </html>
