@@ -1,6 +1,22 @@
 var us;
 var theArray = [];
 
+$(document).ready(function() {
+    $('#listHeader').editable(function(value, settings) { 
+        changeName(value);
+        return(value);
+    }, { 
+        type    : 'text',
+        submit  : 'OK'
+    });
+
+});
+
+function changeName(value) {
+    
+
+};
+
 function showLists(data) {
     $("#listList").show();
 
