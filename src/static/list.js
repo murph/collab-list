@@ -1,5 +1,6 @@
 var us;
 var theArray = [];
+var currentKey;
 
 $(document).ready(function() {
     $('#listHeader').editable(function(value, settings) { 
@@ -13,8 +14,14 @@ $(document).ready(function() {
 });
 
 function changeName(value) {
-    
-
+    $.ajax({
+        url: "/nameList/" + currentKey,
+        type:"POST",
+        data: {
+            name: value
+        },
+        dataType: "json"
+    });
 };
 
 function showLists(data) {
@@ -32,6 +39,7 @@ function showLists(data) {
 
 function joinList() {
     var key = $(this).attr("data-key");
+    currentKey = key;
 
     var defRetrieve = $.Deferred();
     var defRetrieve2 = $.Deferred();
@@ -54,11 +62,19 @@ function joinList() {
     defRetrieve.done(function() {
         tempUs.createNewToken({canWrite: true})
             .done(function(newToken) {
+                console.log("create new done");
                 dopamine.updateStream.retrieveFromToken(newToken)
                     .done(function(newUs) {
+                        console.log("retrieve done");
                         us = newUs;
                         defRetrieve2.resolve();
+                    })
+                    .fail(function(msg) {
+                        console.log("Failed on retrieve: " + msg);
                     });
+            })
+            .fail(function(msg) {
+                console.log("Failed on createNew: " + msg);
             });
     });
 
@@ -172,6 +188,7 @@ $(document).ready(function() {
         dopamine.updateStream.createNew()
             .done(function(newUs) {
                 us = newUs;
+                console.log("New US created");
 
                 $.post("/createList", {
                     name: "Some Name For a List",
@@ -180,6 +197,9 @@ $(document).ready(function() {
                     us.subscribe(onUpdate);
                     joined();
                 });
+            })
+            .fail(function(msg) {
+                console.log("New US failed: " + msg);
             });
     });
 

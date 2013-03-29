@@ -50,5 +50,5 @@ class ListLists(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([('/joinList/([^/]+)?', JoinList),
                                ('/createList', CreateList),
                                ('/listLists', ListLists),
-                               ('/nameList', NameList)],
+                               ('/nameList/([^/]+)?', NameList)],
                               debug=True)
