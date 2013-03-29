@@ -5,12 +5,30 @@
   <title>Collab List</title>
   <script src="http://adrenalinemobility.appspot.com/jquery/1.2.0/jquery-1.8.2.min.js"></script>
   <script src="/static/jquery.jeditable.mini.js"></script>
-  <script src="http://release-0-2.adrenalinemobility.appspot.com/_ah/channel/jsapi"></script>
-  <script src="http://release-0-2.adrenalinemobility.appspot.com/js/updatestream.js"></script>
-  <script src="http://release-0-2.adrenalinemobility.appspot.com/js/dopamine.js"></script>
-  <script src="http://release-0-2.adrenalinemobility.appspot.com/js/objstore.js"></script>
-  <script src="http://release-0-2.adrenalinemobility.appspot.com/js/appendstore.js"></script>
+  <script src="//develop.adrenalinemobility.appspot.com/js/develop/dopamine.min.js"></script>
+  <script>
+    dopamine.accessToken = "ahRzfmFkcmVuYWxpbmVtb2JpbGl0eXIWCxIOVGVtcG9yYXJ5VG9rZW4Y8qUDDA";
+    console.log("Seting access token");
+    console.log(dopamine);
+
+    var dopamineInit = dopamine.init({
+        appId: 55001,
+        newDeviceCall: function(uid) {
+            console.log("new device");
+        }
+    });
+    
+    dopamineInit.done(function() {
+        console.log("Dopamine Connected");
+    })
+    .fail(function(msg) {
+        console.log(msg)
+    });
+  </script>
+
   <script src="/static/list.js"></script>
+
+
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
